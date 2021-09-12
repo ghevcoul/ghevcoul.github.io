@@ -1,0 +1,215 @@
+---
+layout: post
+title: Playing with BC's Vaccine Card
+subtitle: Experiments with decoding and verifying the vaccine cards
+author: Gavin
+slug: vaxx-card
+---
+
+A few weeks ago, British Columbia announced that they were implementing a vaccine passport system. 
+It will start being enforced next week and to prepare for that they opened up the system to get the "cards" this week.
+Turns out, the card is a QR code that you can download to your phone and present to businesses. 
+They've released a [companion app](https://apps.apple.com/ca/app/bc-vaccine-card-verifier/id1583114791) that businesses can use to scan the QR codes and verify they are valid proofs of vaccine. 
+I was curious how the system works, so I did some reading and wrote some code to see what I could learn. 
+<!--more-->
+
+*Disclaimer:* I am not an expert in these vaccine cards or the technologies used to implement them. 
+What I describe below is my own understanding of the technologies from reading and experimenting, anything I say may be incorrect. 
+All the code I used to generate this data is in this [Github repo](https://github.com/ghevcoul/bc_vaxx_card).
+
+## What's in the card?
+
+The first thing to do is decode the QR code.
+Fortunately for me, plenty of tools exist to do that automatically.
+It might be fun some day to write my own QR decoder to understand how they work, but that's not the goal for today. 
+I chose to use the `QRCodeDetector()` function in the [Python OpenCV](https://github.com/opencv/opencv-python) library, so I didn't have to bother with cropping the image.
+You can present it with the same screenshot I'll be showing a business next week and it will find the QR code in the image and decode it for me. 
+When we do that, we get something that looks like: `shc:/5676295953265460346029254077280433602870286567675422280928623725376...`
+This has been truncated for the sake of readability, in actuality we get the `shc:/` prefix followed by about 1700 numbers. 
+
+That `shc:/` prefix tells us that the following data is an encoded version of the [SMART Health Card](https://smarthealth.cards/index.html).
+It is an open standard developed by a group at the Boston Children's Hospital to provide a secure and private way to share health test results and vaccination status. 
+They have an extensive technical document describing the spec for the cards and the motivations behind them.
+The cards are based on the widely used [JSON web signature](https://en.wikipedia.org/wiki/JSON_Web_Signature) (more on that later) format. 
+Clearly, this is a format that has had a thought put into and consideration for how to share this health information in a verifiable, secure, and private way.
+
+Let's take the next step and see what that long string of numbers actually represents.
+To do that, we take pairs of numbers, add 45 to them, and then convert the resulting integer into its corresponding [ASCII character](https://en.wikipedia.org/wiki/ASCII).
+
+```
+56 + 45 = 101 -> e
+76 + 45 = 121 -> y
+29 + 45 =  74 -> J
+```
+
+When we perform this on the full string of numbers we got from the QR code, we get something that looks like a string of gibberish (line breaks added for clarity of reading): 
+
+```
+eyJhbGciOiJFUzI1NiIsInppcCI6IkRFRiIsImtpZCI6IlhDcXhkaGhTN1NXbFBxaWhhVVhvdk1fRmpVNjVXZW9CR
+kdjX3BwZW50MFEifQ.7FPLbtswEPyVYHvVg5LrWNYtdYM2QOAUjWOgCHygSdpiwYdAUkJdQ__epe2gbuHk1GMFARJ
+Xu7OzM6s9SO-hhiaE1td57jV1oRFUhYZRx7O28TRjNO-LHBM74SABs95AXVyPSDUmk6LMSAI9g3oPYdcKqJ8vgSGG
+4_4ds73kxRRBXs-RWndG_qRBWvNm4vGQxgOsEmBOcGGCpOqxW38XLERKm0a6pXA-YtXwPiNZgZgx-qEzXCHdPTjhb
+eeYWBzow-lDchoHmFUK0Y5ssIHb4YyI3Cn15BQmvNTXBBNeDheAv-BIWB8VpFocQaiWCvHg8-3y9uv9t3T28HT_-D
+DHnK3sBXJ-hk83y7s5rAYccS1Rgo80RLRiWl2npErJCIYhucineJvP3Z9C-0BDF3eBWd0qEQTHYE8Zk0bMLD8gMMu
+l2R6o-50PQp9WB_1p1CSzbptHbXMvec76HwiAFbFXSSYQWf5d5Y3VgmfSbGzu0bLfBdV4UhC8KnxMYVgNCbQnAQ-j
+bIQTJs51rj8mWcY6d_gUhVpIfWxfFikZp2WFHZQN806vcZdrGBFSjkcx2gq3sU7HKE5HWbD4tgcufatotGhJDbNdL
+9zVzBr0Jsp2NYsLIdCB1WsmlP9NWJybMEnL-J-cm0DG5awsbv6JCXgPwy8AAAD__wMA.Q55LPKCoQiJm7GqSkea4N
+aj87CWD2Rhk-p4f_3nMQZtGrC-pXX_WPwypH72L-npi-yPPVOg7y-tiRgSisUsy
+```
+This gibberish is actually [URL-safe Base64](https://en.wikipedia.org/wiki/Base64#The_URL_applications) encoded data, with one exception.
+If you look at the long string of data, you will see two periods mixed in.
+These are illegal characters in URL-safe Base64, so what are they doing there?
+It turns out, they're delimeters and this string is actually three separate Base64 encoded strings. 
+From the JWS format, we know that these should be the "header", "payload", and "signature" respectively. 
+Let's run them through a Base64 decoder and see what we get.
+
+### Header
+The header comes out looking like a fairly straightforward JSON object.
+
+```
+{
+  "alg": "ES256",
+  "zip": "DEF",
+  "kid": "XCqxdhhS7SWlPqihaUXovM_FjU65WeoBFGc_ppent0Q"
+}
+```
+
+From the JWS spec, I know that this describes how to parse and verify the data in the payload and signature.
+The "alg" section tells use which cryptographic algorithm was used to sign the data, this will be important later for verifying the authenticity of the data. 
+In this case, `ES256` is shorthand for [ECDSA](https://ldapwiki.com/wiki/ES256) with the P-256 curve and SHA-256 hashing.
+Unless you want to learn cryptography, exactly what that means is irrelevant here beyond knowing that this is modern cryptographic signature.
+Next, the "zip" section tells us `DEF`, which means that the payload was compressed using the [DEFLATE](https://en.wikipedia.org/wiki/Deflate) algorithm. 
+Finally, the "kid" section gives an ID for the public key used to sign this data.
+We'll see in a moment how to use that. 
+
+### Payload
+When decoded, the payload Base64 is just a string of bytes.
+I won't show that here because it's not particularly interesting, but remember that we were told in the header that the payload was compressed with DEFLATE.
+Inflating it, we get a large JSON object with some interesting data in it. 
+Starting at the top, we see:
+
+```
+{
+  "iss": "https://smarthealthcard.phsa.ca/v1/issuer",
+  "nbf": 1630850712.0,
+  "vc": {
+    "type": [
+      "https://smarthealth.cards#covid19",
+      "https://smarthealth.cards#immunization",
+      "https://smarthealth.cards#health-card"
+    ],
+  ...
+}
+```
+
+This is telling us that we have a SMART Health Card with some links to information about the cards. 
+The "iss" section is also giving a link, but in this case it is pointing to information about how to verify the data presented.
+According to the SMART Health Card spec, in the "iss" section is a link that when appended with `/.well-known/jwks.json` will point to the public keys used to sign this card.
+Going to that [link](https://smarthealthcard.phsa.ca/v1/issuer/.well-known/jwks.json) we get yet another JSON object.
+
+```
+{
+  "keys": [
+    {
+      "kty": "EC",
+      "kid": "XCqxdhhS7SWlPqihaUXovM_FjU65WeoBFGc_ppent0Q",
+      "use": "sig",
+      "alg": "ES256",
+      "crv": "P-256",
+      "x": "xscSbZemoTx1qFzFo-j9VSnvAXdv9K-3DchzJvNnwrY",
+      "y": "jA5uS5bz8R2nxf_TU-0ZmXq6CKWZhAG1Y4icAx8a9CA"
+    }
+  ]
+}
+```
+
+This provides all the information we'll need later to verify the health card hasn't been tampered with. 
+Of particular interest right now is the "kid" section, which is identical to the "kid" from the header.
+This tells us that the keys we just downloaded are in fact the same ones used to sign this health card. 
+
+Looking further down the JSON payload is my personal COVID-19 vaccination information. 
+First we have an entry that defines me as the patient:
+
+```
+{
+  "fullUrl": "resource:0",
+  "resource": {
+    "resourceType": "Patient",
+    "name": [
+      {
+        "family": "HEVERLY-COULSON",
+        "given": ["GAVIN"]
+      }
+    ],
+    "birthDate": "1986-08-03"
+  }
+}
+```
+
+This adheres to the SMART Health Card spec that says the only personal information that should be included is full name and birth date.
+Great, BC isn't pulling anything funny here. 
+
+Then, we have two sections describing my two COVID-19 vaccinations:
+
+```
+{
+  "fullUrl": "resource:1",
+  "resource": {
+    "resourceType": "Immunization",
+    "status": "completed",
+    "vaccineCode": {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/sid/cvx",
+          "code": "207"
+        },
+        {
+          "system": "http://snomed.info/sct",
+          "code": "28571000087109"
+        }
+      ]
+    },
+    "patient": {
+      "reference": "resource:0"
+    },
+    "occurrenceDateTime": "2021-05-28",
+    "lotNumber": "3002538",
+    "performer": [
+      {
+        "actor": {
+          "display": "Vancouver Convention Centre"
+        }
+      }
+    ]
+  }
+}
+```
+
+It says I received an immunization, on May 28 at the Vancouver Convention Centre, which is all correct.
+To know what the immunization was, we need to look at the `vaccineCode`.
+There are two resources provided there, [SNOMED](https://en.wikipedia.org/wiki/Systematized_Nomenclature_of_Medicine) and [FHIR](https://en.wikipedia.org/wiki/Fast_Healthcare_Interoperability_Resources), which are two international databases of medicial procedures and medicines.
+The BC government provides a [spreadsheet](https://www2.gov.bc.ca/assets/gov/health/practitioner-pro/health-information-standards/bc-snomed-mapping-din-pin-vaccinations.xlsx) of the SNOMED mappings for all the vaccinations approved for use in the province. 
+Finding code 28571000087109 in the spreadsheet, we see that it is "COVID-19 Vaccine Moderna messenger ribonucleic acid-1273 100 micrograms per 0.5 milliliter suspension for injection Moderna Therapeutics Inc. (medicinal product)" - the Moderna mRNA COVID-19 vaccine that I received. 
+
+### Signature
+The last piece of the data included in the QR code is the signature.
+After decoding the Base64 string, we are presented with another string of bytes. 
+I won't go into details of exactly what is in here (mostly because I don't actually know), but it is sufficient to know that it is a digital signature created using the the ECDSA algorithm mentioned above. 
+We can verify that the data in the payload wasn't tampered with using this signature.
+If we compute a signature using the keys retrieved earlier and compare it to this one, we'll know that this is real and accurate data.
+
+This is a key part of the whole vaccine card system. 
+Without it, I could take someone else's valid QR code, do all the work described above to decode it, edit their personal details for my own, and then create a new QR code containing my name. 
+But, by doing that, the signatures will not match, telling the system verifying your vaccine card that it is not authentic. 
+This is the essense of cryptographic signatures, you can use the public key (the one we downloaded earlier) to verify a signature, but we cannot generate a new signature.
+To do that, we would need the corresponding private key, which will be a closely guarded secret held by the BC government and used to create these vaccine cards.
+
+## Verification of the card
+
+One final note on the signature. 
+We obtained the keys used to verify it by going to a website specified in the QR code, but the vaccine card verifier app that BC released says it works offline.
+How does it do that?
+It's actually fairly simple, they can pre-load the keys into the app, so there is no online query required to obtain the public keys, they're already there.
+
+
+Thank you to [this commenter](https://www.reddit.com/r/vancouver/comments/plysaj/bc_vaccine_card_verifier_is_now_live_in_apple_app/hcezuqv) for sending me down this path and providing the initial information I needed to get to the SMART Health Card data in my own QR code. 
