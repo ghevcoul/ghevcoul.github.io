@@ -6,7 +6,7 @@ subtitle: Hosted by Genevieve and Gavin
 
 You're invited to celebrate American Thanksgiving, potluck style with your favourite Americans, Genevieve (not really an American, just pretended for a while) and Gavin (actually an American, just pretends not to be).
 
-Please RSVP by Friday November 18, so we can get final numbers and plan accordingly.
+### Please RSVP by Friday November 18, so we can get final numbers and plan accordingly.
 
 ## When
 
