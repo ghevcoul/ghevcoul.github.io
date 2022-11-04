@@ -10,7 +10,7 @@ You're invited to celebrate American Thanksgiving, potluck style with your favou
 
 ## When
 
-Saturday November 26, 2022 at _Late Afternoon_
+Saturday November 26, 2022 at 4pm
 
 ## Where
 
@@ -20,7 +20,6 @@ Saturday November 26, 2022 at _Late Afternoon_
 
 ## What should I bring?
 
-We will be providing _delicious food to be determined_. Please come with one or more dishes of your own. We expect there to be _TBD people (more than 2🤞, less than 20)_, so please plan accordingly and make enough for everyone. 
-
+We will be providing pumpkin risotto and a dessert. Please come with one or more dishes of your own. We expect there to be _TBD people (more than 2🤞, less than 20)_, so please plan accordingly and make enough for everyone. 
 
 Have you RSVPed yet? If not, [go here](https://docs.google.com/spreadsheets/d/1uxpkITi65yf4CnaE0LP5aXzLs1DVVpJ5owRf_bklIZk/edit?usp=sharing) to do so.
