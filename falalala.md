@@ -23,6 +23,6 @@ Monday December 26, 2022 at 11:30 am
 We will be providing _so many_ waffles. 
 Please come with waffle toppings to share and make our delicious waffles even better.
 
-If you have a waffle maker, please bring it so we can make waffles faster.
+If you have a waffle maker, please bring it so we can make waffles faster. Our 20 year old one can only go so fast.
 
 Have you RSVPed yet? If not, [go here](https://docs.google.com/spreadsheets/d/1BWIjHSnlcU57CBOhr_czX3uBXRfD860gK9xsuKEVLi0/edit?usp=sharing) to do so.
