@@ -1,12 +1,18 @@
 ---
 layout: page
-title: Boxing Day Brunch
+title: Bah Humbug Brunch
 subtitle: Hosted by Genevieve and Gavin
 ---
 
-You're invited to celebrate Christmas on Boxing Day with Gavin and Genevieve. We're thinking a low-key post-Christmas gathering to replace all those family feelings (good and bad). We'll be providing a whole pile of waffles, bring your favourite topping to share. 
+Whether you love it or hate it, this time of year can be hard, what with the family and hearing Christmas carols for 2 months straight and so much joviality. 
 
-### Please [RSVP](https://docs.google.com/spreadsheets/d/1BWIjHSnlcU57CBOhr_czX3uBXRfD860gK9xsuKEVLi0/edit?usp=sharing) by Monday November 19, so we can get final numbers and plan accordingly.
+To help you through all those feelings (whatever they are), we're hosting a low-key post-Christmas gathering on Boxing Day. 
+We'll be providing a whole pile of waffles, bring your favourite topping to share. 
+
+For those wishing to participate, we're also planning an entirely optional [white elephant gift exchange](https://en.wikipedia.org/wiki/White_elephant_gift_exchange). 
+Just something small, homemade preferred, that you think someone else would love. 
+
+### Please [RSVP](https://docs.google.com/spreadsheets/d/1BWIjHSnlcU57CBOhr_czX3uBXRfD860gK9xsuKEVLi0/edit?usp=sharing) by Monday December 19, so we can get final numbers and plan accordingly.
 
 ## When
 
@@ -22,6 +28,8 @@ Monday December 26, 2022 at 11:30 am
 
 We will be providing _so many_ waffles. 
 Please come with waffle toppings to share and make our delicious waffles even better.
+
+If you'd like to participate, also bring a white elephant gift.
 
 If you have a waffle maker, please bring it so we can make waffles faster. Our 20 year old one can only go so fast.
 
