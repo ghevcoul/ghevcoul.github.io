@@ -43,6 +43,6 @@ On the weekend, you can usually find me at whatever sidewalk fair or festival is
 * [Twitter](https://twitter.com/gavin_h_c)
 * [LinkedIn](https://www.linkedin.com/in/ghevcoul/)
 * [GitHub](https://github.com/ghevcoul)
-* [Mastodon](https://mastodon.technology/@ghevcoul)
+* [Mastodon](https://mstdn.social/@ghevcoul)
 * [GoodReads](https://goodreads.com/morvita)
 * [Steam](https://steamcommunity.com/id/morvita/)
