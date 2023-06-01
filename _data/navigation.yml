@@ -15,5 +15,7 @@
       link: /recently/read
     - name: Watched
       link: /recently/watched
+    - name: Listened
+      link: /recently/listened
 - name: Blog
   link: blog
