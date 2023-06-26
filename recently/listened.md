@@ -46,6 +46,11 @@ At the same time, they aren't afraid to discuss the darker side of Canadian hist
 Started life as *What Trump Can Teach Us About Con Law*, each episode is a conversation between Roman Mars (of 99% Invisible) and Elizabeth Joh (his neighbour and a constitutional law professor) about recent high profile US Supreme Court cases.
 It's an engaging and accessible way to learn more about the intricacies of the US legal system and constitution beyond the two amendments everyone knows. 
 
+## Articles of Interest
+
+I'm not someone that's particularly into fashion or the culture surrounding it, but 99pi alum, Avery Truffelman's podcast about fashion hits that enjoying hearing someone talk about their passions part of my brain.
+Whether it's a story about the history of mannequins or a 7-part series on Ivy League style, the stories are always fascinating and shine light on a part of our society I don't normally spend much time thinking about.
+
 # Defunct Shows
 
 These are podcasts that are no longer actively producing new episodes, but in my opinion are well worth going back and listening to the back catalogs.
