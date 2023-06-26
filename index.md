@@ -7,7 +7,7 @@ show_sidebar: true
 ---
 
 I am a PhD computational chemist turned software developer. 
-Currently living in Berkeley, California, I spent most of my adult life living in Canada. 
+Currently living in Vancouver, British Columbia, after a stint in the San Francisco Bay Area. 
 I'm an endlessly curious technology enthusiast who is always ready to dive into the unknown and learn new things. 
 After leaving academia, I've started my industry career working in location technology and mapping.
 Outside of work, I'm an avid reader and a lifelong gamer (tabletop RPG, board, and video). 
@@ -35,8 +35,8 @@ On the weekend, you can usually find me at whatever sidewalk fair or festival is
 ### Deployment Tools
 * Kubernetes + Helm
 * Docker
-* AWS -- EMR, EC2, Sagemaker, Cloudformation, Step Functions, Lambda
-* Gitlab
+* AWS -- EMR, EC2, ECS, Cloudformation, Step Functions, Lambda
+* Gitlab, Github
 
 
 # Where can you find me?
