@@ -4,13 +4,13 @@ title: The Great American Thanksgiving Brunch Potluck
 subtitle: Hosted by Genevieve and Gavin
 ---
 
-You're invited to celebrate American Thanksgiving, brunch style, with your favourite Americans, Genevieve (not really an American, just pretended for a while) and Gavin (actually an American, just pretends not to be).
+You're invited to celebrate American Thanksgiving, brunch style, with your friends and the best dishes they can concoct.
 
-### Please [RSVP](https://docs.google.com/spreadsheets/d/14D8j4ljOn9UOrn3Sr2zBXGxv84Gkri9HKdh7AyGmc0M/edit?usp=sharing) by Friday November 17, so we can get final numbers and plan accordingly.
+### Please [RSVP](https://docs.google.com/spreadsheets/d/14D8j4ljOn9UOrn3Sr2zBXGxv84Gkri9HKdh7AyGmc0M/edit?usp=sharing) by Friday November 17, so we can get final numbers and everyone can plan accordingly.
 
 ## When
 
-Saturday November 25, 2022 at 11am
+Saturday November 25, 2023 at 11am
 
 ## Where
 
