@@ -24,7 +24,8 @@ twitter_username: gavin_h_c
 github_username:  ghevcoul
 
 # Build settings
-remote_theme: chrisrhymes/bulma-clean-theme
+# Github pages doesn't work with later versions of this theme
+remote_theme: chrisrhymes/bulma-clean-theme@v0.14.0
 markdown: kramdown
 
 # plugins:
